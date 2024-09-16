@@ -1,3 +1,3 @@
-# Název projektu
+# PyFarm
 
-Popis projektu, návod k instalaci apod.
+Hra o farmaření.
