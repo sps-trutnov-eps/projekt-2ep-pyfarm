@@ -8,9 +8,11 @@ screen = pygame.display.set_mode(screen_size)
 
 running = True
 
+postava1 = pygame.image.load("images/postava1.png")
+
 while running:
     screen.fill((255,255,255))
-
+    screen.blit(postava1,(500,300))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
