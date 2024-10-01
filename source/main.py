@@ -55,6 +55,11 @@ class Hrac(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.rect.center += self.direction
+        
+        self.rect.left = max(camera_group.map_rect.left, self.rect.left)
+        self.rect.right = min(camera_group.map_rect.right, self.rect.right)
+        self.rect.top = max(camera_group.map_rect.top, self.rect.top)
+        self.rect.bottom = min(camera_group.map_rect.bottom, self.rect.bottom)
 
 
 camera_group = Camera_group()
