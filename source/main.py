@@ -6,11 +6,35 @@ pygame.display.set_caption("PyFarm")
 screen_size = 1000, 600
 screen = pygame.display.set_mode(screen_size)
 
-class Hrac(pygame.sprite.Sprite):
+class Camera_group(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        
+        self.posun = pygame.math.Vector2()
+        self.half_width = self.display_surface.get_size()[0] // 2
+        self.half_height = self.display_surface.get_size()[1] // 2
+        
+        self.map_surf = pygame.image.load("images/mapa1.png").convert_alpha()
+        self.map_rect = self.map_surf.get_rect(topleft = (0,0))
+        
+    def stred_camera(self, target):
+        self.posun.x = target.rect.centerx - self.half_width
+        self.posun.y = target.rect.centery - self.half_height
+
+    def custom_draw(self, hrac):
+        self.stred_camera(hrac)
+        posun_mapy = self.map_rect.topleft - self.posun
+        self.display_surface.blit(self.map_surf, posun_mapy)
+        for sprite in self.sprites():
+            posun_pos = sprite.rect.topleft - self.posun
+            self.display_surface.blit(sprite.image, posun_pos)
+
+class Hrac(pygame.sprite.Sprite):
+    def __init__(self, pos, group):
+        super().__init__(group)
         self.image = postava1 = pygame.image.load("images/postava1.png").convert_alpha()
-        self.rect = postava1.get_rect(center = (500,300)) 
+        self.rect = postava1.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
 
@@ -28,11 +52,12 @@ class Hrac(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.rect.center += self.direction
-hrac = Hrac()
-
-mapa1 = pygame.image.load("images/mapa1.png")
 
 clock = pygame.time.Clock()
+camera_group = Camera_group()
+hrac = Hrac((1500,1500), camera_group)
+
+
 running = True
 
 while running:
@@ -42,8 +67,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     hrac.update()
-    screen.blit(hrac.image, hrac.rect)
-    
+
+    camera_group.update()
+    camera_group.custom_draw(hrac)
     pygame.display.update()
     clock.tick(60)
 
