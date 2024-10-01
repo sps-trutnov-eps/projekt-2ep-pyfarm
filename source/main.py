@@ -11,27 +11,28 @@ class Hrac(pygame.sprite.Sprite):
         super().__init__()
         self.image = postava1 = pygame.image.load("images/postava1.png").convert_alpha()
         self.rect = postava1.get_rect(center = (500,300)) 
-        self.speed = 6
+        self.direction = pygame.math.Vector2()
+        self.speed = 5
 
     def input(self):
         keys = pygame.key.get_pressed()
-    
+        self.direction = pygame.math.Vector2()
         if keys[pygame.K_LEFT]:
-            self.rect.x -= self.speed  
+            self.direction.x -= self.speed  
         if keys[pygame.K_RIGHT]:
-            self.rect.x += self.speed 
+            self.direction.x += self.speed 
         if keys[pygame.K_UP]:
-            self.rect.y -= self.speed 
+            self.direction.y -= self.speed 
         if keys[pygame.K_DOWN]:
-            self.rect.y += self.speed 
+            self.direction.y += self.speed 
     def update(self):
         self.input()
-
+        self.rect.center += self.direction
 hrac = Hrac()
 
 mapa1 = pygame.image.load("images/mapa1.png")
 
-
+clock = pygame.time.Clock()
 running = True
 
 while running:
@@ -44,7 +45,7 @@ while running:
     screen.blit(hrac.image, hrac.rect)
     
     pygame.display.update()
-    pygame.time.Clock().tick(60)
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()
