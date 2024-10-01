@@ -2,9 +2,12 @@ import pygame
 import sys
 
 pygame.init()
+
 pygame.display.set_caption("PyFarm")
 screen_size = 1000, 600
 screen = pygame.display.set_mode(screen_size)
+clock = pygame.time.Clock()
+
 
 class Camera_group(pygame.sprite.Group):
     def __init__(self):
@@ -30,6 +33,7 @@ class Camera_group(pygame.sprite.Group):
             posun_pos = sprite.rect.topleft - self.posun
             self.display_surface.blit(sprite.image, posun_pos)
 
+
 class Hrac(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
@@ -37,7 +41,6 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = postava1.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
-
     def input(self):
         keys = pygame.key.get_pressed()
         self.direction = pygame.math.Vector2()
@@ -53,7 +56,7 @@ class Hrac(pygame.sprite.Sprite):
         self.input()
         self.rect.center += self.direction
 
-clock = pygame.time.Clock()
+
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
 
@@ -70,6 +73,8 @@ while running:
 
     camera_group.update()
     camera_group.custom_draw(hrac)
+    
+    
     pygame.display.update()
     clock.tick(60)
 
