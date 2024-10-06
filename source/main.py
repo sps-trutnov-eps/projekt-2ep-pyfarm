@@ -73,7 +73,7 @@ class Ctverec_obchodu(pygame.sprite.Sprite):
 
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
-ctverec_obchodu = Ctverec_obchodu((255,0,0), 100, 50, 1500, 1200, camera_group)
+ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
 running = True
 
