@@ -86,6 +86,30 @@ class Cow(pygame.sprite.Sprite):
 
     def update(self):
         self.move()
+        
+class Sheep(pygame.sprite.Sprite):
+    def __init__(self, pos, group):
+        super().__init__(group)
+        self.image = pygame.transform.scale(pygame.image.load("images\sheep.png"), (125, 80)).convert_alpha()
+        self.rect = self.image.get_rect(center=pos)
+        self.direction = pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])) 
+        self.speed =  2.5
+       
+    def move(self):
+        self.rect.center += self.direction * self.speed
+
+        if random.randint(0, 100) < 2:  
+            self.direction.x = random.choice([-1, 1])
+            self.direction.y = random.choice([-1, 1])
+
+        if self.rect.left < camera_group.map_rect.left or self.rect.right > camera_group.map_rect.right:
+            self.direction.x *= -1
+        if self.rect.top < camera_group.map_rect.top or self.rect.bottom > camera_group.map_rect.bottom:
+            self.direction.y *= -1
+
+    def update(self):
+        self.move()
+
 
 
 class Ctverec_obchodu(pygame.sprite.Sprite):
@@ -99,6 +123,7 @@ class Ctverec_obchodu(pygame.sprite.Sprite):
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
 cow = Cow((1600, 1600), camera_group)
+sheep = Sheep((1300, 1300), camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
 running = True
