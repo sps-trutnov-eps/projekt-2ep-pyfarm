@@ -1,5 +1,6 @@
 import pygame
 import sys
+from obchod import Obchod
 
 pygame.init()
 
@@ -88,10 +89,15 @@ while running:
     camera_group.custom_draw(hrac)
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
-        print("obchod otevřen")
+        shop = Obchod(hrac) 
+        shop.run()
+        print("1")
     
     pygame.display.update()
     clock.tick(60)
 
 pygame.quit()
 sys.exit()
+
+if __name__ == "__main__":
+    main()
