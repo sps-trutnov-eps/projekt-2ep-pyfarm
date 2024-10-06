@@ -37,8 +37,8 @@ class Camera_group(pygame.sprite.Group):
 class Hrac(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
-        self.image = postava1 = pygame.image.load("images/postava1.png").convert_alpha()
-        self.rect = postava1.get_rect(center = pos) 
+        self.image = pygame.image.load("images/postava1.png").convert_alpha()
+        self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
     def input(self):
@@ -62,9 +62,17 @@ class Hrac(pygame.sprite.Sprite):
         self.rect.bottom = min(camera_group.map_rect.bottom, self.rect.bottom)
 
 
+class Ctverec_obchodu(pygame.sprite.Sprite):
+    def __init__(self, color, width, height, x, y, group):
+        super().__init__(group)
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+        self.rect = self.image.get_rect(topleft=(x,y))
+
+
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
-
+ctverec_obchodu = Ctverec_obchodu((255,0,0), 100, 50, 1500, 1200, camera_group)
 
 running = True
 
@@ -79,6 +87,8 @@ while running:
     camera_group.update()
     camera_group.custom_draw(hrac)
     
+    if hrac.rect.colliderect(ctverec_obchodu.rect):
+        print("obchod otevřen")
     
     pygame.display.update()
     clock.tick(60)
