@@ -22,6 +22,6 @@ class Obchod:
             self.clock.tick(60)
         
         self.hrac.rect.topleft = (self.hrac.rect.x + 120, self.hrac.rect.y)
-
+        pygame.display.set_mode((1000,600))
 
 
