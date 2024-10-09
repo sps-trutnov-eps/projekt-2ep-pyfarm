@@ -9,7 +9,7 @@ pygame.display.set_caption("PyFarm")
 screen_size = 1000, 600
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
-
+font = pygame.font.Font(None, 42)
 
 class Camera_group(pygame.sprite.Group):
     def __init__(self):
@@ -119,6 +119,9 @@ class Ctverec_obchodu(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft=(x,y))
 
+money = 0
+money_surf = font.render(f"Money: {money}", False, (0,0,0))
+money_rect = money_surf.get_rect(center = (900, 45))
 
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
@@ -138,6 +141,7 @@ while running:
 
     camera_group.update()
     camera_group.custom_draw(hrac)
+    screen.blit(money_surf, money_rect)
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
