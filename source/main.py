@@ -129,6 +129,9 @@ cow = Cow((1600, 1600), camera_group)
 sheep = Sheep((1300, 1300), camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
+#blue_flower = pygame.image.load("images/Flowers/blue_flower.png")
+
+
 running = True
 
 while running:
@@ -142,6 +145,8 @@ while running:
     camera_group.update()
     camera_group.custom_draw(hrac)
     screen.blit(money_surf, money_rect)
+    
+    #screen.blit(blue_flower, (800,100))
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
