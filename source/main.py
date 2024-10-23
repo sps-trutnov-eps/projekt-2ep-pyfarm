@@ -20,7 +20,7 @@ class Camera_group(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         
-        self.map_surf = pygame.image.load("images/mapa1.png").convert_alpha()
+        self.map_surf = pygame.image.load("images/zkouskamapy.png").convert_alpha()
         self.map_rect = self.map_surf.get_rect(topleft = (0,0))
         
     def stred_camera(self, target):
@@ -39,7 +39,7 @@ class Camera_group(pygame.sprite.Group):
 class Hrac(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
-        self.image = pygame.image.load("images/postava1.png").convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load("images\character_blue.png"), (35,80)).convert_alpha()
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
@@ -129,8 +129,6 @@ cow = Cow((1600, 1600), camera_group)
 sheep = Sheep((1300, 1300), camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
-#blue_flower = pygame.image.load("images/Flowers/blue_flower.png")
-
 
 running = True
 
@@ -145,8 +143,7 @@ while running:
     camera_group.update()
     camera_group.custom_draw(hrac)
     screen.blit(money_surf, money_rect)
-    
-    #screen.blit(blue_flower, (800,100))
+
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
