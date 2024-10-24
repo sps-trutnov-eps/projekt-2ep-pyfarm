@@ -20,7 +20,7 @@ class Camera_group(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         
-        self.map_surf = pygame.image.load("images/zkouskamapy.png").convert_alpha()
+        self.map_surf = pygame.image.load("images/mapa_v1.png").convert_alpha()
         self.map_rect = self.map_surf.get_rect(topleft = (0,0))
         
     def stred_camera(self, target):
