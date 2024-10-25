@@ -119,6 +119,31 @@ class Ctverec_obchodu(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft=(x,y))
 
+
+class Flower(pygame.sprite.Sprite):
+    def __init__(self, pos, group, flower_image):
+        super().__init__(group)
+        self.image = flower_image.convert_alpha()
+        self.rect = self.image.get_rect(center = pos)
+        
+def flower_spawn():
+    flower_images = [
+        pygame.image.load("images/Flowers/blue_flower.png"),
+        pygame.image.load("images/Flowers/orange_flower.png"),
+        pygame.image.load("images/Flowers/purple_flower.png"),
+        pygame.image.load("images/Flowers/red_flower.png")
+    ]
+    chosen_image = random.choice(flower_images)
+    random_position = (
+        random.randint(camera_group.map_rect.left, camera_group.map_rect.right),
+        random.randint(camera_group.map_rect.top, camera_group.map_rect.bottom)
+    )
+    Flower(random_position, camera_group, chosen_image)
+    print("flower just spawned")
+
+
+
+
 money = 0
 money_surf = font.render(f"Money: {money}", False, (0,0,0))
 money_rect = money_surf.get_rect(center = (900, 45))
@@ -129,6 +154,8 @@ cow = Cow((1600, 1600), camera_group)
 sheep = Sheep((1300, 1300), camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
+FLOWER_EVENT = pygame.USEREVENT + 1
+pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
 
 running = True
 
@@ -138,12 +165,21 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == FLOWER_EVENT:
+            flower_spawn()
+            pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
+    
     hrac.update()
 
     camera_group.update()
     camera_group.custom_draw(hrac)
     screen.blit(money_surf, money_rect)
 
+    for sprite in camera_group.sprites():
+        if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
+            sprite.kill()
+            money += 10
+            money_surf = font.render(f"Money: {money}", False, (0,0,0))
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
