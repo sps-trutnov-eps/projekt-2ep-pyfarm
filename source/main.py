@@ -62,6 +62,19 @@ class Hrac(pygame.sprite.Sprite):
         self.rect.right = min(camera_group.map_rect.right, self.rect.right)
         self.rect.top = max(camera_group.map_rect.top, self.rect.top)
         self.rect.bottom = min(camera_group.map_rect.bottom, self.rect.bottom)
+                
+class FarmPlot(pygame.sprite.Sprite):
+    def __init__(self, x, y, group):
+        super().__init__(group)
+        self.image = pygame.Surface((100, 100))  
+        self.image.fill((139, 69, 19)) 
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.is_planted = False
+
+    def plant_seed(self):
+        if not self.is_planted:
+            self.is_planted = True
+            self.image.fill((34, 139, 34))
         
 
 class Cow(pygame.sprite.Sprite):
@@ -149,6 +162,8 @@ money_surf = font.render(f"Money: {money}", False, (0,0,0))
 money_rect = money_surf.get_rect(center = (900, 45))
 
 camera_group = Camera_group()
+farm_plot_positions = [(1600, 1400), (1720, 1400), (1840, 1400), (1600, 1520), (1720, 1520)] 
+farm_plots = [FarmPlot(x, y, camera_group) for x, y in farm_plot_positions]
 hrac = Hrac((1500,1500), camera_group)
 cow = Cow((1600, 1600), camera_group)
 sheep = Sheep((1300, 1300), camera_group)
@@ -156,6 +171,7 @@ ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
+
 
 running = True
 
@@ -180,12 +196,15 @@ while running:
             sprite.kill()
             money += 10
             money_surf = font.render(f"Money: {money}", False, (0,0,0))
+        elif isinstance(sprite, FarmPlot) and hrac.rect.colliderect(sprite.rect):
+            sprite.plant_seed()
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
         shop.run()
         print("1")
     
+
     pygame.display.update()
     clock.tick(60)
 
