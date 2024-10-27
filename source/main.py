@@ -43,6 +43,8 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
+        self.seeds = 3 
+        self.carrots = 0
     def input(self):
         keys = pygame.key.get_pressed()
         self.direction = pygame.math.Vector2()
@@ -53,7 +55,20 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_UP]:
             self.direction.y -= self.speed 
         if keys[pygame.K_DOWN]:
-            self.direction.y += self.speed 
+            self.direction.y += self.speed
+        if keys[pygame.K_SPACE] and self.seeds > 0:  
+            for plot in farm_plots:
+                if self.rect.colliderect(plot.rect) and not plot.is_planted:
+                    plot.plant_seed()
+                    self.seeds -= 1  
+                    break
+                
+        if keys[pygame.K_SPACE]:  
+            for plot in farm_plots:
+                if self.rect.colliderect(plot.rect) and plot.is_planted and plot.growth_stage == 3:
+                    if plot.harvest():
+                        self.carrots += 1  
+                        break
     def update(self):
         self.input()
         self.rect.center += self.direction
@@ -63,19 +78,55 @@ class Hrac(pygame.sprite.Sprite):
         self.rect.top = max(camera_group.map_rect.top, self.rect.top)
         self.rect.bottom = min(camera_group.map_rect.bottom, self.rect.bottom)
                 
-class FarmPlot(pygame.sprite.Sprite):
-    def __init__(self, x, y, group):
-        super().__init__(group)
-        self.image = pygame.Surface((100, 100))  
-        self.image.fill((139, 69, 19)) 
-        self.rect = self.image.get_rect(topleft=(x, y))
+
+class FarmPlot:
+    def __init__(self, x, y):
+        self.soil_image = pygame.Surface((100, 100))
+        self.soil_image.fill((139, 69, 19))  
+        self.rect = self.soil_image.get_rect(topleft=(x, y))
         self.is_planted = False
+        self.growth_stage = -1
+        self.growth_timer = 0
 
     def plant_seed(self):
         if not self.is_planted:
             self.is_planted = True
-            self.image.fill((34, 139, 34))
-        
+            self.growth_stage = 0
+            self.growth_timer = pygame.time.get_ticks()
+            
+    def harvest(self):
+        if self.is_planted and self.growth_stage == 3: 
+            self.is_planted = False  
+            self.growth_stage = -1
+            return True  
+        return False  
+
+    def update(self):
+        if self.is_planted:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.growth_timer > 5000:
+                if self.growth_stage < 3:
+                    self.growth_stage += 1
+                    self.growth_timer = current_time
+
+    def draw(self, surface, camera_pos):
+        surface.blit(self.soil_image, self.rect.topleft - camera_pos)
+
+        growth_image = None
+        if self.growth_stage == 0:
+            growth_image = pygame.image.load("images/seeds/seeds.png").convert_alpha()
+        elif self.growth_stage == 1:
+            growth_image = pygame.image.load("images/seeds/carrot1.png").convert_alpha()
+        elif self.growth_stage == 2:
+            growth_image = pygame.image.load("images/seeds/carrot2.png").convert_alpha()
+        elif self.growth_stage == 3:
+            growth_image = pygame.image.load("images/seeds/carrot3.png").convert_alpha()
+        else:
+            return  
+
+        if growth_image: 
+            growth_image = pygame.transform.scale(growth_image, (100, 100))
+            surface.blit(growth_image, self.rect.topleft - camera_pos)
 
 class Cow(pygame.sprite.Sprite):
     def __init__(self, pos, group):
@@ -162,8 +213,16 @@ money_surf = font.render(f"Money: {money}", False, (0,0,0))
 money_rect = money_surf.get_rect(center = (900, 45))
 
 camera_group = Camera_group()
-farm_plot_positions = [(1600, 1400), (1720, 1400), (1840, 1400), (1600, 1520), (1720, 1520)] 
-farm_plots = [FarmPlot(x, y, camera_group) for x, y in farm_plot_positions]
+farm_plot_positions = [
+    (200, 300),  # First plot position
+    (350, 300),  # Second plot position
+    (500, 300),  # Third plot position
+    (650, 300),  # Fourth plot position
+    (800, 300),   # Fifth plot position
+    (950, 300)   # Sixth plot position
+]
+
+farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
 hrac = Hrac((1500,1500), camera_group)
 cow = Cow((1600, 1600), camera_group)
 sheep = Sheep((1300, 1300), camera_group)
@@ -175,12 +234,19 @@ pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
 
 running = True
 
+
 while running:
-    
-    screen.fill((255,255,255))
+    screen.fill((255, 255, 255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                for plot in farm_plots:
+                    if hrac.rect.colliderect(plot.rect) and not plot.is_planted:
+                        plot.plant_seed()  
+                        hrac.seeds -= 1  
+                        break
         elif event.type == FLOWER_EVENT:
             flower_spawn()
             pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -189,15 +255,29 @@ while running:
 
     camera_group.update()
     camera_group.custom_draw(hrac)
-    screen.blit(money_surf, money_rect)
 
+    for plot in farm_plots:
+        plot.update()
+        plot.draw(camera_group.display_surface, camera_group.posun)
+
+    
+    screen.blit(money_surf, money_rect)
+    seeds_surf = font.render(f"Seeds: {hrac.seeds}", False, (0, 0, 0))
+    seeds_rect = seeds_surf.get_rect(topleft=(10, 10))
+    screen.blit(seeds_surf, seeds_rect)
+
+    carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
+    carrots_rect = carrots_surf.get_rect(topleft=(10, 50))
+    screen.blit(carrots_surf, carrots_rect)
+    
+    camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
+     
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
             sprite.kill()
+            hrac.carrots += 1  
             money += 10
-            money_surf = font.render(f"Money: {money}", False, (0,0,0))
-        elif isinstance(sprite, FarmPlot) and hrac.rect.colliderect(sprite.rect):
-            sprite.plant_seed()
+            money_surf = font.render(f"Money: {money}", False, (0, 0, 0))
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
