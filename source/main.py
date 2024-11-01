@@ -45,6 +45,9 @@ class Hrac(pygame.sprite.Sprite):
         self.speed = 5
         self.seeds = 3 
         self.carrots = 0
+        self.sheep = 1
+        self.wool = 0
+        self.sheep_placed = False
     def input(self):
         keys = pygame.key.get_pressed()
         self.direction = pygame.math.Vector2()
@@ -69,6 +72,18 @@ class Hrac(pygame.sprite.Sprite):
                     if plot.harvest():
                         self.carrots += 1  
                         break
+        
+        if keys[pygame.K_SPACE] and self.sheep > 0 and not self.sheep_placed:
+            if self.rect.colliderect(sheep_fence.rect):
+                sheep.place_in_fence(sheep_fence)  # Use the correct method here
+                self.sheep -= 1
+                self.sheep_placed = True
+        
+        if keys[pygame.K_h]: 
+            if self.rect.colliderect(sheep.rect) and sheep.harvest_wool():
+                self.wool += 1  
+
+                    
     def update(self):
         self.input()
         self.rect.center += self.direction
@@ -151,29 +166,42 @@ class Cow(pygame.sprite.Sprite):
     def update(self):
         self.move()
         
-class Sheep(pygame.sprite.Sprite):
-    def __init__(self, pos, group):
+class SheepFence(pygame.sprite.Sprite):
+    def __init__(self, color, width, height, x, y, group):
         super().__init__(group)
-        self.image = pygame.transform.scale(pygame.image.load("images\sheep.png"), (125, 80)).convert_alpha()
-        self.rect = self.image.get_rect(center=pos)
-        self.direction = pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])) 
-        self.speed =  2.5
-       
-    def move(self):
-        self.rect.center += self.direction * self.speed
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+        self.rect = self.image.get_rect(topleft=(x, y))           
+        
+class Sheep(pygame.sprite.Sprite):
+    def __init__(self, fence, group):
+        super().__init__(group)
+        self.image_with_wool = pygame.transform.scale(pygame.image.load("images/sheep.png"), (125, 80)).convert_alpha()
+        self.image_without_wool = pygame.transform.scale(pygame.image.load("images/bald-sheep.png"), (125, 80)).convert_alpha()
+        self.image = self.image_with_wool
+        self.rect = self.image.get_rect(center=(-100, -100))
+        self.has_wool = True
+        self.growth_timer = pygame.time.get_ticks()
+    
+    def place_in_fence(self, fence):
+        self.rect.center = fence.rect.center
+        self.has_wool = True
+        self.image = self.image_with_wool
 
-        if random.randint(0, 100) < 2:  
-            self.direction.x = random.choice([-1, 1])
-            self.direction.y = random.choice([-1, 1])
-
-        if self.rect.left < camera_group.map_rect.left or self.rect.right > camera_group.map_rect.right:
-            self.direction.x *= -1
-        if self.rect.top < camera_group.map_rect.top or self.rect.bottom > camera_group.map_rect.bottom:
-            self.direction.y *= -1
-
+    def harvest_wool(self):
+        if self.has_wool:
+            self.has_wool = False
+            self.image = self.image_without_wool
+            self.growth_timer = pygame.time.get_ticks()
+            return True
+        return False
+    
     def update(self):
-        self.move()
-
+        if not self.has_wool:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.growth_timer > 10000:  # 10 seconds for wool to regrow
+                self.has_wool = True
+                self.image = self.image_with_wool
 
 
 class Ctverec_obchodu(pygame.sprite.Sprite):
@@ -225,7 +253,8 @@ farm_plot_positions = [
 farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
 hrac = Hrac((1500,1500), camera_group)
 cow = Cow((1600, 1600), camera_group)
-sheep = Sheep((1300, 1300), camera_group)
+sheep_fence = SheepFence((150, 100, 30), 150, 150, 900, 1200, camera_group)
+sheep = Sheep(sheep_fence, camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 
 FLOWER_EVENT = pygame.USEREVENT + 1
@@ -271,7 +300,15 @@ while running:
     screen.blit(carrots_surf, carrots_rect)
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
-     
+    
+    sheep.update()
+    wool_surf = font.render(f"Wool: {hrac.wool}", False, (0, 0, 0))
+    screen.blit(wool_surf, (10, 90))
+    
+    sheep_surf = font.render(f"Sheep: {hrac.sheep}", False, (0, 0, 0))
+    screen.blit(sheep_surf, (10, 130))
+    
+    
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
             sprite.kill()
