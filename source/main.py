@@ -43,9 +43,13 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
-        self.seeds = {'carrot': 3, 'wheat': 3}
+        self.seeds = {
+            'carrot': 3,  # Initial carrot seeds
+            'wheat': 2    # Initial wheat seeds
+        }
         self.carrots = 0
         self.wheat = 0
+        self.selected_seed = "carrot"
         self.sheep = 1
         self.wool = 0
         self.sheep_placed = False
@@ -61,22 +65,21 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN]:
             self.direction.y += self.speed
         
-        if keys[pygame.K_SPACE] and self.seeds[self.selected_seed] > 0:
+        if keys[pygame.K_SPACE] and self.seeds[self.selected_seed] > 0:  # Check selected seed count
             for plot in farm_plots:
                 if self.rect.colliderect(plot.rect) and not plot.is_planted:
-                    plot.plant_seed(self.selected_seed)
-                    self.seeds[self.selected_seed] -= 1
+                    plot.plant_seed(self.selected_seed)  # Pass the selected seed type here
+                    self.seeds[self.selected_seed] -= 1  # Decrease the count for the selected seed type
                     break
                 
-        if keys[pygame.K_SPACE]:  
+        if keys[pygame.K_SPACE]:
             for plot in farm_plots:
-        # Check if the player's position overlaps with the plot and it's ready for harvest
                 if self.rect.colliderect(plot.rect) and plot.is_planted and plot.growth_stage == 3:
-                    harvested_crop = plot.harvest()  # This will return the type of crop (e.g., "carrot" or "wheat")
+                    harvested_crop = plot.harvest()
                     if harvested_crop == "carrot":
-                        self.carrots += 1  # Increment carrot count
+                        self.carrots += 1
                     elif harvested_crop == "wheat":
-                        self.wheat += 1  # Increment wheat count
+                        self.wheat += 1
                     break
         
         if keys[pygame.K_SPACE] and self.sheep > 0 and not self.sheep_placed:
@@ -126,9 +129,9 @@ class FarmPlot:
         if self.is_planted and self.growth_stage == 3:
             self.is_planted = False
             self.growth_stage = -1
-            crop_type = self.crop_type
-            self.crop_type = None
-            return crop_type
+            harvested_crop = self.crop_type  
+            self.crop_type = None 
+            return harvested_crop  
         return None
 
     def update(self):
@@ -294,11 +297,12 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                for plot in farm_plots:
-                    if hrac.rect.colliderect(plot.rect) and not plot.is_planted:
-                        plot.plant_seed()  
-                        hrac.seeds -= 1  
-                        break
+                if hrac.seeds[hrac.selected_seed] > 0:  # Check if the player has the selected seed
+                    for plot in farm_plots:
+                        if hrac.rect.colliderect(plot.rect) and not plot.is_planted:
+                            plot.plant_seed(hrac.selected_seed)  # Plant with selected seed type
+                            hrac.seeds[hrac.selected_seed] -= 1  # Decrease the seed count
+                            break
         elif event.type == FLOWER_EVENT:
             flower_spawn()
             pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -313,26 +317,23 @@ while running:
         plot.draw(camera_group.display_surface, camera_group.posun)
 
     seeds_surf = font.render(f"Carrot Seeds: {hrac.seeds['carrot']}", False, (0, 0, 0))
-    screen.blit(seeds_surf, (10, 10))
+    screen.blit(seeds_surf, (10, 200))
 
     wheat_seeds_surf = font.render(f"Wheat Seeds: {hrac.seeds['wheat']}", False, (0, 0, 0))
     screen.blit(wheat_seeds_surf, (10, 50))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
-    screen.blit(selected_seed_surf, (10, 90))
+    screen.blit(selected_seed_surf, (10, 400))
 
     
     screen.blit(money_surf, money_rect)
-    seeds_surf = font.render(f"Seeds: {hrac.seeds}", False, (0, 0, 0))
-    seeds_rect = seeds_surf.get_rect(topleft=(10, 10))
-    screen.blit(seeds_surf, seeds_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
-    carrots_rect = carrots_surf.get_rect(topleft=(10, 50))
+    carrots_rect = carrots_surf.get_rect(topleft=(10, 250))
     screen.blit(carrots_surf, carrots_rect)
     
     wheat_surf = font.render(f"Wheat: {hrac.wheat}", False, (0, 0, 0))
-    wheat_rect = wheat_surf.get_rect(topleft=(10, 90))  # Adjust the position below the carrot count
+    wheat_rect = wheat_surf.get_rect(topleft=(10, 300))  # Adjust the position below the carrot count
     screen.blit(wheat_surf, wheat_rect)
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
