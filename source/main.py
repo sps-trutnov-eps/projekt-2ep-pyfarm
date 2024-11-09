@@ -320,30 +320,30 @@ while running:
     screen.blit(seeds_surf, (10, 200))
 
     wheat_seeds_surf = font.render(f"Wheat Seeds: {hrac.seeds['wheat']}", False, (0, 0, 0))
-    screen.blit(wheat_seeds_surf, (10, 50))
+    screen.blit(wheat_seeds_surf, (10, 30))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
-    screen.blit(selected_seed_surf, (10, 400))
+    screen.blit(selected_seed_surf, (10, 550))
 
     
     screen.blit(money_surf, money_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
-    carrots_rect = carrots_surf.get_rect(topleft=(10, 250))
+    carrots_rect = carrots_surf.get_rect(topleft=(10, 240))
     screen.blit(carrots_surf, carrots_rect)
     
     wheat_surf = font.render(f"Wheat: {hrac.wheat}", False, (0, 0, 0))
-    wheat_rect = wheat_surf.get_rect(topleft=(10, 300))  # Adjust the position below the carrot count
+    wheat_rect = wheat_surf.get_rect(topleft=(10, 280))
     screen.blit(wheat_surf, wheat_rect)
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
     
     sheep.update()
     wool_surf = font.render(f"Wool: {hrac.wool}", False, (0, 0, 0))
-    screen.blit(wool_surf, (10, 90))
+    screen.blit(wool_surf, (10, 70))
     
     sheep_surf = font.render(f"Sheep: {hrac.sheep}", False, (0, 0, 0))
-    screen.blit(sheep_surf, (10, 130))
+    screen.blit(sheep_surf, (10, 110))
     
     
     for sprite in camera_group.sprites():
