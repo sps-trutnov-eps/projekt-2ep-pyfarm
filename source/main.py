@@ -444,9 +444,6 @@ while running:
             flower_spawn()
             pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
     
-    pygame.draw.rect(screen, (0, 200, 200), closet_button)
-    closet_button_text = font.render("Closet", True, (255, 255, 255))
-    screen.blit(closet_button_text, closet_button.topleft)
     
     hrac.update()
 
@@ -499,6 +496,11 @@ while running:
 
     meat_surf = font.render(f"Meat: {hrac.meat}", False, (0, 0, 0))
     screen.blit(meat_surf, (10, 370))
+    
+    closet_button = pygame.Rect(850, 200, 150, 50)
+    pygame.draw.rect(screen, (0, 200, 200), closet_button)
+    closet_button_text = font.render("Closet", True, (255, 255, 255))
+    screen.blit(closet_button_text, closet_button.topleft)
     
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
