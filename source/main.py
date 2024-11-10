@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import os
 from obchod import Obchod
 
 pygame.init()
@@ -134,6 +135,54 @@ class Hrac(pygame.sprite.Sprite):
         self.rect.bottom = min(camera_group.map_rect.bottom, self.rect.bottom)
                 
 
+class Closet:
+    def __init__(self, hrac):
+        self.hrac = hrac
+        self.clothing_images = self.load_clothing_images()
+        self.selected_skin = None
+
+    def load_clothing_images(self):
+        images = []
+        folder_path = "images/Clothes"
+        for filename in os.listdir(folder_path):
+            if filename.endswith(".png"):
+                img = pygame.image.load(os.path.join(folder_path, filename)).convert_alpha()
+                img = pygame.transform.scale(img, (80, 80))
+                images.append(img)
+        return images
+
+    def display_closet(self, screen):
+        screen.fill((220, 220, 220))
+        font = pygame.font.Font(None, 42)
+        title_surf = font.render("Choose Your Skin", True, (0, 0, 0))
+        screen.blit(title_surf, (400, 50))
+        
+        for idx, img in enumerate(self.clothing_images):
+            x = 100 + (idx % 5) * 120
+            y = 150 + (idx // 5) * 120
+            screen.blit(img, (x, y))
+            if img.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
+                pygame.draw.rect(screen, (0, 255, 0), img.get_rect(topleft=(x, y)), 3)
+
+    def run(self, screen):
+        closet_open = True
+        while closet_open:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    for idx, img in enumerate(self.clothing_images):
+                        x = 100 + (idx % 5) * 120
+                        y = 150 + (idx // 5) * 120
+                        if img.get_rect(topleft=(x, y)).collidepoint(event.pos):
+                            self.hrac.image = pygame.transform.scale(img, (35, 80))
+                            closet_open = False
+                            break
+
+            self.display_closet(screen)
+            pygame.display.update()
+            
 class FarmPlot:
     def __init__(self, x, y):
         self.soil_image = pygame.Surface((100, 100))
@@ -365,6 +414,7 @@ cow_fence = CowFence((200, 100, 50), 150, 150, 900, 1400, camera_group)
 cow = Cow(cow_fence, camera_group)
 pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)  # Position the pig fence
 pig = Pig(pig_fence, camera_group)
+closet_button = pygame.Rect(850, 10, 100, 40)
 
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -378,17 +428,25 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if closet_button.collidepoint(event.pos):
+                closet = Closet(hrac)
+                closet.run(screen)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if hrac.seeds[hrac.selected_seed] > 0:  # Check if the player has the selected seed
+                if hrac.seeds[hrac.selected_seed] > 0:
                     for plot in farm_plots:
                         if hrac.rect.colliderect(plot.rect) and not plot.is_planted:
-                            plot.plant_seed(hrac.selected_seed)  # Plant with selected seed type
-                            hrac.seeds[hrac.selected_seed] -= 1  # Decrease the seed count
+                            plot.plant_seed(hrac.selected_seed)
+                            hrac.seeds[hrac.selected_seed] -= 1
                             break
         elif event.type == FLOWER_EVENT:
             flower_spawn()
             pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
+    
+    pygame.draw.rect(screen, (0, 200, 200), closet_button)
+    closet_button_text = font.render("Closet", True, (255, 255, 255))
+    screen.blit(closet_button_text, closet_button.topleft)
     
     hrac.update()
 
