@@ -56,6 +56,9 @@ class Hrac(pygame.sprite.Sprite):
         self.cow = 1
         self. milk = 0
         self.cow_placed = False
+        self.pig = 2
+        self.meat = 0 
+        self.pig_placed = False 
         
     def input(self):
         keys = pygame.key.get_pressed()
@@ -109,6 +112,17 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_h]:
             if self.rect.colliderect(cow.rect) and cow.harvest_milk():
                 self.milk += 1
+                
+        if keys[pygame.K_SPACE] and self.pig > 0 and not self.pig_placed:
+            if self.rect.colliderect(pig_fence.rect):
+                pig.place_in_fence(pig_fence)  
+                self.pig -= 1
+                self.pig_placed = True
+
+        if keys[pygame.K_h]:  
+            if self.rect.colliderect(pig.rect) and pig.harvest_meat():
+                self.meat += 1
+                self.pig_placed = False
                     
     def update(self):
         self.input()
@@ -256,7 +270,46 @@ class Sheep(pygame.sprite.Sprite):
                 self.has_wool = True
                 self.image = self.image_with_wool
 
+class PigFence(pygame.sprite.Sprite):
+    def __init__(self, color, width, height, x, y, group):
+        super().__init__(group)
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+        self.rect = self.image.get_rect(topleft=(x, y))
 
+class Pig(pygame.sprite.Sprite):
+    def __init__(self, fence, group):
+        super().__init__(group)
+        self.image_pig = pygame.transform.scale(pygame.image.load("images/pig.png"), (125, 80)).convert_alpha()
+        self.image_meat = pygame.image.load("images/meat.png").convert_alpha()
+        self.image = self.image_pig 
+        self.rect = self.image.get_rect(center=(-100, -100))
+        self.is_ready = False
+        self.growth_timer = pygame.time.get_ticks()
+        self.harvested = False
+    
+    def place_in_fence(self, fence):
+        self.rect.center = fence.rect.center
+        self.is_ready = False
+        self.harvested = False 
+        self.image = self.image_pig
+        self.growth_timer = pygame.time.get_ticks()
+        
+    def harvest_meat(self):
+        if self.is_ready and not self.harvested:
+            self.harvested = True 
+            self.rect.center=(-1000, -100)
+            return True
+        return False
+    
+    def update(self):
+        if not self.is_ready and not self.harvested:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.growth_timer > 10000: 
+                self.is_ready = True
+                self.image = self.image_meat
+        
+        
 class Ctverec_obchodu(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x, y, group):
         super().__init__(group)
@@ -310,7 +363,8 @@ sheep = Sheep(sheep_fence, camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 cow_fence = CowFence((200, 100, 50), 150, 150, 900, 1400, camera_group) 
 cow = Cow(cow_fence, camera_group)
-
+pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)  # Position the pig fence
+pig = Pig(pig_fence, camera_group)
 
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -369,6 +423,7 @@ while running:
     
     sheep.update()
     cow.update()
+    cow.update()
     wool_surf = font.render(f"Wool: {hrac.wool}", False, (0, 0, 0))
     screen.blit(wool_surf, (10, 70))
     
@@ -381,10 +436,15 @@ while running:
     cow_surf = font.render(f"Cow: {hrac.cow}", False, (0, 0, 0))
     screen.blit(cow_surf, (10, 190))
     
+    pig_surf = font.render(f"Pig: {hrac.pig}", False, (0, 0, 0))
+    screen.blit(pig_surf, (10, 410))
+
+    meat_surf = font.render(f"Meat: {hrac.meat}", False, (0, 0, 0))
+    screen.blit(meat_surf, (10, 370))
+    
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
             sprite.kill()
-            hrac.carrots += 1  
             money += 10
             money_surf = font.render(f"Money: {money}", False, (0, 0, 0))
     
