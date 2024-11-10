@@ -40,7 +40,7 @@ class Camera_group(pygame.sprite.Group):
 class Hrac(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
-        self.image = pygame.transform.scale(pygame.image.load("images\character_blue.png"), (35,80)).convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load("images\clothes\character_pink.png"), (35,80)).convert_alpha()
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.speed = 5
@@ -415,6 +415,10 @@ cow = Cow(cow_fence, camera_group)
 pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)  # Position the pig fence
 pig = Pig(pig_fence, camera_group)
 closet_button = pygame.Rect(850, 10, 100, 40)
+carrot_seed_image = pygame.image.load('images/seeds/carrot_seeds.png')
+carrot_seed_image = pygame.transform.scale(carrot_seed_image, (40, 40))
+wheat_seed_image = pygame.image.load('images/seeds/wheat_seeds.png')
+wheat_seed_image = pygame.transform.scale(wheat_seed_image, (30, 30))
 
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -455,10 +459,12 @@ while running:
         plot.draw(camera_group.display_surface, camera_group.posun)
 
     seeds_surf = font.render(f"Carrot Seeds: {hrac.seeds['carrot']}", False, (0, 0, 0))
-    screen.blit(seeds_surf, (10, 320))
+    screen.blit(seeds_surf, (50, 320))
+    screen.blit(carrot_seed_image, (10,315))
 
     wheat_seeds_surf = font.render(f"Wheat Seeds: {hrac.seeds['wheat']}", False, (0, 0, 0))
-    screen.blit(wheat_seeds_surf, (10, 30))
+    screen.blit(wheat_seeds_surf, (50, 30))
+    screen.blit(wheat_seed_image, (10,25))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
     screen.blit(selected_seed_surf, (10, 550))
