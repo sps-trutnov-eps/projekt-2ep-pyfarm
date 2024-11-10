@@ -194,16 +194,16 @@ class Cow(pygame.sprite.Sprite):
         super().__init__(group)
         self.image_milk = pygame.image.load("images/milk.png")
         self.image_without_milk = pygame.transform.scale(pygame.image.load("images/cow.png"), (125, 80)).convert_alpha()
-        self.image = self.image_milk
+        self.image = self.image_without_milk
         self.rect = self.image.get_rect(center=(-1000, -100))
-        self.has_milk = True
+        self.has_milk = False
         self.growth_timer = pygame.time.get_ticks()
         
     def place_in_fence(self, fence):
         self.rect.center = fence.rect.center
-        self.has_milk = True
-        self.image = self.image_milk
-    
+        self.has_milk = False
+        self.image = self.image_without_milk
+        self.growth_timer = pygame.time.get_ticks()
     def harvest_milk(self):
         if self.has_milk:
             self.has_milk = False
