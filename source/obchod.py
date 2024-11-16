@@ -4,7 +4,7 @@ import sys
 class Obchod:
     def __init__(self, hrac):
         pygame.init()
-        self.screen_size = 900, 500
+        self.screen_size = 1000, 600
         self.screen = pygame.display.set_mode(self.screen_size)
         self.clock = pygame.time.Clock()
         self.running = True

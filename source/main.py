@@ -293,7 +293,7 @@ class Sheep(pygame.sprite.Sprite):
     def __init__(self, fence, group):
         super().__init__(group)
         self.image_with_wool = pygame.transform.scale(pygame.image.load("images/sheep.png"), (125, 80)).convert_alpha()
-        self.image_without_wool = pygame.transform.scale(pygame.image.load("images/bald-sheep.png"), (125, 80)).convert_alpha()
+        self.image_without_wool = pygame.transform.scale(pygame.image.load("images/bald-sheep-opraveno.png"), (125, 80)).convert_alpha()
         self.image = self.image_with_wool
         self.rect = self.image.get_rect(center=(-1000, -100))
         self.has_wool = True
@@ -332,7 +332,7 @@ class Pig(pygame.sprite.Sprite):
         self.image_pig = pygame.transform.scale(pygame.image.load("images/pig.png"), (125, 80)).convert_alpha()
         self.image_meat = pygame.image.load("images/meat.png").convert_alpha()
         self.image = self.image_pig 
-        self.rect = self.image.get_rect(center=(-100, -100))
+        self.rect = self.image.get_rect(center=(-1000, -100))
         self.is_ready = False
         self.growth_timer = pygame.time.get_ticks()
         self.harvested = False
