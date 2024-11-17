@@ -45,8 +45,8 @@ class Hrac(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 5
         self.seeds = {
-            'carrot': 3,  # Initial carrot seeds
-            'wheat': 2    # Initial wheat seeds
+            'carrot': 3,  
+            'wheat': 2   
         }
         self.carrots = 0
         self.wheat = 0
@@ -73,11 +73,11 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN]:
             self.direction.y += self.speed
         
-        if keys[pygame.K_SPACE] and self.seeds[self.selected_seed] > 0:  # Check selected seed count
+        if keys[pygame.K_SPACE] and self.seeds[self.selected_seed] > 0: 
             for plot in farm_plots:
                 if self.rect.colliderect(plot.rect) and not plot.is_planted:
-                    plot.plant_seed(self.selected_seed)  # Pass the selected seed type here
-                    self.seeds[self.selected_seed] -= 1  # Decrease the count for the selected seed type
+                    plot.plant_seed(self.selected_seed)  
+                    self.seeds[self.selected_seed] -= 1  
                     break
                 
         if keys[pygame.K_SPACE]:
@@ -504,7 +504,7 @@ while running:
     screen.blit(meat_surf, (10, 370))
     
     closet_button = pygame.Rect(850, 200, 150, 50)
-    pygame.draw.rect(screen, (0, 200, 200), closet_button)
+    pygame.draw.rect(screen, (250, 200, 200), closet_button)
     closet_button_text = font.render("Closet", True, (255, 255, 255))
     screen.blit(closet_button_text, closet_button.topleft)
     
