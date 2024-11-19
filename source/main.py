@@ -43,6 +43,7 @@ class Hrac(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load("images\clothes\character_pink.png"), (35,80)).convert_alpha()
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
+        self.money = 0
         self.speed = 5
         self.seeds = {
             'carrot': 3,  
@@ -391,11 +392,11 @@ def flower_spawn():
 
 
 
-money = 0
-money_surf = font.render(f"Money: {money}", False, (0,0,0))
-money_rect = money_surf.get_rect(center = (900, 45))
+
 
 camera_group = Camera_group()
+hrac = Hrac((1500,1500), camera_group)
+
 farm_plot_positions = [
     (200, 300),  # First plot position
     (350, 300),  # Second plot position
@@ -406,7 +407,7 @@ farm_plot_positions = [
 ]
 
 farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
-hrac = Hrac((1500,1500), camera_group)
+
 sheep_fence = SheepFence((150, 100, 30), 150, 150, 900, 1200, camera_group)
 sheep = Sheep(sheep_fence, camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
@@ -469,7 +470,8 @@ while running:
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
     screen.blit(selected_seed_surf, (10, 550))
 
-    
+    money_surf = font.render(f"Money: {hrac.money}", False, (0,0,0))
+    money_rect = money_surf.get_rect(center = (900, 45))
     screen.blit(money_surf, money_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
@@ -511,8 +513,8 @@ while running:
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
             sprite.kill()
-            money += 10
-            money_surf = font.render(f"Money: {money}", False, (0, 0, 0))
+            hrac.money += 10
+            money_surf = font.render(f"Money: {hrac.money}", False, (0, 0, 0))
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
