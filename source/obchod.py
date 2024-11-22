@@ -58,12 +58,17 @@ class Obchod:
                 if self.hrac.money >= item["price"]:
                     if item["attribute"] == "carrot_seeds":
                         self.hrac.seeds['carrot'] += 1 
+                        self.hrac.money -= item["price"]
                     elif item["attribute"] == "wheat_seeds":
                         self.hrac.seeds['wheat'] += 1
+                        self.hrac.money -= item["price"]
                     elif item["attribute"] == "sheep":
-                        self.hrac.sheep += 1 
+                        if self.hrac.sheep_placed > 0 or self.hrac.sheep > 0:
+                            print("You already have a sheep!")
+                        else:
+                            self.hrac.sheep += 1 
+                            self.hrac.money -= item["price"]
 
-                    self.hrac.money -= item["price"]
     
     def run(self):
         while self.running:
