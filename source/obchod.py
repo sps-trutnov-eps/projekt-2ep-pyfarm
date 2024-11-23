@@ -7,7 +7,10 @@ class Obchod:
         self.hrac = hrac
         self.screen_size = 1000, 600
         self.screen = pygame.display.set_mode(self.screen_size)
+        self.font = pygame.font.Font(None, 36)
         self.clock = pygame.time.Clock()
+        self.max_sheep_surf = self.font.render("You already have a sheep!", False, (0, 0, 0))
+        self.sheep_max_timer = pygame.time.get_ticks()
         self.running = True
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
             {"name": "Carrot Seeds", "price": 20, "attribute": "carrot_seeds"},
@@ -16,7 +19,6 @@ class Obchod:
             {"name": "Cow", "price": 60, "attribute": "cow"},
             {"name": "Pig", "price": 60, "attribute": "pig"}
         ]
-        self.font = pygame.font.Font(None, 36)
     
     def sell_items(self):
         if self.hrac.carrots > 0:
@@ -66,7 +68,10 @@ class Obchod:
                         self.hrac.money -= item["price"]
                     elif item["attribute"] == "sheep":
                         if self.hrac.sheep_placed > 0 or self.hrac.sheep > 0:
-                            print("You already have a sheep!")
+                            current_time = pygame.time.get_ticks()
+                            if current_time - self.sheep_max_timer < 7000:
+                                print("You already have a sheep!")
+                                self.screen.blit(self.max_sheep_surf, (670, 10))
                         else:
                             self.hrac.sheep += 1 
                             self.hrac.money -= item["price"]

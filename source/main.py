@@ -418,6 +418,13 @@ pig = Pig(pig_fence, camera_group)
 closet_button = pygame.Rect(850, 10, 100, 40)
 carrot_seed_image = pygame.image.load('images/seeds/carrot_seeds.png')
 carrot_seed_image = pygame.transform.scale(carrot_seed_image, (40, 40))
+
+milk_image = pygame.transform.scale(pygame.image.load("images/milk.png"), (30,40))
+meat_image = pygame.transform.scale(pygame.image.load("images/meat.png"), (40,40))
+sheep_image = pygame.transform.scale(pygame.image.load("images/sheep.png"), (40,30))
+cow_image = pygame.transform.scale(pygame.image.load("images/cow.png"), (40,30))
+pig_image = pygame.transform.scale(pygame.image.load("images/pig.png"), (40,30))
+
 wheat_seed_image = pygame.image.load('images/seeds/wheat_seeds.png')
 wheat_seed_image = pygame.transform.scale(wheat_seed_image, (30, 30))
 
@@ -491,19 +498,24 @@ while running:
     screen.blit(wool_surf, (10, 70))
     
     sheep_surf = font.render(f"Sheep: {hrac.sheep}", False, (0, 0, 0))
-    screen.blit(sheep_surf, (10, 110))
-    
+    screen.blit(sheep_surf, (50, 110))
+    screen.blit(sheep_image, (8,105))
+
     milk_surf = font.render(f"Milk: {hrac.milk}", False, (0, 0, 0))
-    screen.blit(milk_surf, (10, 150))
+    screen.blit(milk_surf, (50, 150))
+    screen.blit(milk_image, (10,140))
 
     cow_surf = font.render(f"Cow: {hrac.cow}", False, (0, 0, 0))
-    screen.blit(cow_surf, (10, 190))
-    
-    pig_surf = font.render(f"Pig: {hrac.pig}", False, (0, 0, 0))
-    screen.blit(pig_surf, (10, 410))
+    screen.blit(cow_surf, (50, 190))
+    screen.blit(cow_image, (8,189))
 
+    pig_surf = font.render(f"Pig: {hrac.pig}", False, (0, 0, 0))
+    screen.blit(pig_surf, (50, 410))
+    screen.blit(pig_image, (8,406))
+    
     meat_surf = font.render(f"Meat: {hrac.meat}", False, (0, 0, 0))
-    screen.blit(meat_surf, (10, 370))
+    screen.blit(meat_surf, (55, 370))
+    screen.blit(meat_image, (10,360))
     
     closet_button = pygame.Rect(850, 200, 150, 50)
     pygame.draw.rect(screen, (250, 200, 200), closet_button)
