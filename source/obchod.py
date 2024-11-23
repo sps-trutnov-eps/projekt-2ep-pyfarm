@@ -10,7 +10,7 @@ class Obchod:
         self.font = pygame.font.Font(None, 36)
         self.clock = pygame.time.Clock()
         self.max_sheep_surf = self.font.render("You already have a sheep!", False, (0, 0, 0))
-        self.sheep_max_timer = pygame.time.get_ticks()
+        #self.sheep_max_timer = pygame.time.get_ticks()
         self.running = True
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
             {"name": "Carrot Seeds", "price": 20, "attribute": "carrot_seeds"},
@@ -68,10 +68,8 @@ class Obchod:
                         self.hrac.money -= item["price"]
                     elif item["attribute"] == "sheep":
                         if self.hrac.sheep_placed > 0 or self.hrac.sheep > 0:
-                            current_time = pygame.time.get_ticks()
-                            if current_time - self.sheep_max_timer < 7000:
-                                print("You already have a sheep!")
-                                self.screen.blit(self.max_sheep_surf, (670, 10))
+                            print("You already have a sheep!")
+                            self.screen.blit(self.max_sheep_surf, (670, 10))
                         else:
                             self.hrac.sheep += 1 
                             self.hrac.money -= item["price"]
@@ -90,16 +88,22 @@ class Obchod:
             self.screen.fill((235, 235, 255))
             self.display_items() 
             self.sell_items()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: 
                     self.check_click(event.pos)
 
+            money_surf = self.font.render(f"Money: {self.hrac.money}", False, (0,0,0))
+            money_rect = money_surf.get_rect(center = (900, 45))
+            self.screen.blit(money_surf, money_rect)
+
+
             pygame.display.update()
             self.clock.tick(60)
         
-        self.hrac.rect.topleft = (self.hrac.rect.x + 120, self.hrac.rect.y)
+        self.hrac.rect.topleft = (self.hrac.rect.x + 150, self.hrac.rect.y)
         pygame.display.set_mode((1000,600))
         return self.hrac.money
 

@@ -10,7 +10,7 @@ pygame.display.set_caption("PyFarm")
 screen_size = 1000, 600
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 42)
+font = pygame.font.Font(None, 40)
 
 class Camera_group(pygame.sprite.Group):
     def __init__(self):
@@ -361,11 +361,10 @@ class Pig(pygame.sprite.Sprite):
         
         
 class Ctverec_obchodu(pygame.sprite.Sprite):
-    def __init__(self, color, width, height, x, y, group):
+    def __init__(self, group):
         super().__init__(group)
-        self.image = pygame.Surface((width, height))
-        self.image.fill(color)
-        self.rect = self.image.get_rect(topleft=(x,y))
+        self.image = pygame.transform.scale(pygame.image.load("images/shop.png"), (100,80))
+        self.rect = self.image.get_rect(topleft=(1550, 1500))
 
 
 class Flower(pygame.sprite.Sprite):
@@ -390,10 +389,6 @@ def flower_spawn():
     print("flower just spawned")
 
 
-
-
-
-
 camera_group = Camera_group()
 hrac = Hrac((1500,1500), camera_group)
 
@@ -410,7 +405,8 @@ farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
 
 sheep_fence = SheepFence((150, 100, 30), 150, 150, 900, 1200, camera_group)
 sheep = Sheep(sheep_fence, camera_group)
-ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
+
+ctverec_obchodu = Ctverec_obchodu(camera_group)
 cow_fence = CowFence((200, 100, 50), 150, 150, 900, 1400, camera_group) 
 cow = Cow(cow_fence, camera_group)
 pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)
