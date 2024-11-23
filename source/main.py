@@ -363,7 +363,7 @@ class Pig(pygame.sprite.Sprite):
 class Ctverec_obchodu(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
-        self.image = pygame.transform.scale(pygame.image.load("images/shop.png"), (100,80))
+        self.image = pygame.transform.scale(pygame.image.load("images/shop-uprava2.png"), (100,80))
         self.rect = self.image.get_rect(topleft=(1550, 1500))
 
 
