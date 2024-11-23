@@ -5,9 +5,9 @@ class Obchod:
     def __init__(self, hrac):
         pygame.init()
         self.hrac = hrac
-        self.screen_size = 1000, 600
+        self.screen_size = 1200, 700
         self.screen = pygame.display.set_mode(self.screen_size)
-        self.font = pygame.font.Font(None, 36)
+        self.font = pygame.font.Font(None, 40)
         self.clock = pygame.time.Clock()
         self.max_sheep_surf = self.font.render("You already have a sheep!", False, (0, 0, 0))
         #self.sheep_max_timer = pygame.time.get_ticks()
@@ -96,7 +96,7 @@ class Obchod:
                     self.check_click(event.pos)
 
             money_surf = self.font.render(f"Money: {self.hrac.money}", False, (0,0,0))
-            money_rect = money_surf.get_rect(center = (900, 45))
+            money_rect = money_surf.get_rect(center = (1100, 45))
             self.screen.blit(money_surf, money_rect)
 
 
@@ -104,6 +104,6 @@ class Obchod:
             self.clock.tick(60)
         
         self.hrac.rect.topleft = (self.hrac.rect.x + 150, self.hrac.rect.y)
-        pygame.display.set_mode((1000,600))
+        pygame.display.set_mode((1200,700))
         return self.hrac.money
 

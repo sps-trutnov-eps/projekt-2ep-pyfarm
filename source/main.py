@@ -7,10 +7,10 @@ from obchod import Obchod
 pygame.init()
 
 pygame.display.set_caption("PyFarm")
-screen_size = 1000, 600
+screen_size = 1200, 700
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 40)
+font = pygame.font.Font(None, 42)
 
 class Camera_group(pygame.sprite.Group):
     def __init__(self):
@@ -390,7 +390,7 @@ def flower_spawn():
 
 
 camera_group = Camera_group()
-hrac = Hrac((1500,1500), camera_group)
+hrac = Hrac((1400,1200), camera_group)
 
 farm_plot_positions = [
     (200, 300),  # First plot position
@@ -471,10 +471,10 @@ while running:
     screen.blit(wheat_seed_image, (10,25))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
-    screen.blit(selected_seed_surf, (10, 550))
+    screen.blit(selected_seed_surf, (10, 650))
 
     money_surf = font.render(f"Money: {hrac.money}", False, (0,0,0))
-    money_rect = money_surf.get_rect(center = (900, 45))
+    money_rect = money_surf.get_rect(center = (1100, 45))
     screen.blit(money_surf, money_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
@@ -513,7 +513,7 @@ while running:
     screen.blit(meat_surf, (55, 370))
     screen.blit(meat_image, (10,360))
     
-    closet_button = pygame.Rect(850, 200, 150, 50)
+    closet_button = pygame.Rect(1050, 200, 150, 50)
     pygame.draw.rect(screen, (250, 200, 200), closet_button)
     closet_button_text = font.render("Closet", True, (255, 255, 255))
     screen.blit(closet_button_text, closet_button.topleft)
