@@ -12,7 +12,9 @@ class Obchod:
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
             {"name": "Carrot Seeds", "price": 20, "attribute": "carrot_seeds"},
             {"name": "Wheat Seeds", "price": 30, "attribute": "wheat_seeds"},
-            {"name": "Sheep", "price": 60, "attribute": "sheep"}
+            {"name": "Sheep", "price": 60, "attribute": "sheep"},
+            {"name": "Cow", "price": 60, "attribute": "cow"},
+            {"name": "Pig", "price": 60, "attribute": "pig"}
         ]
         self.font = pygame.font.Font(None, 36)
     
@@ -36,12 +38,12 @@ class Obchod:
     def display_items(self):
         for idx, item in enumerate(self.items):
             x = 100
-            y = 150 + idx * 100
-            width = 300
+            y = 50 + idx * 100
+            width = 350
             height = 80
         
-            pygame.draw.rect(self.screen, (200, 200, 200), (x, y, width, height))
-            pygame.draw.rect(self.screen, (0, 0, 0), (x, y, width, height), 2)
+            pygame.draw.rect(self.screen, (174, 198, 255), (x, y, width, height))
+            pygame.draw.rect(self.screen, (106, 139, 204), (x, y, width, height), 2)
             
             text = f"{item['name']} - {item['price']} money"
             text_surf = self.font.render(text, True, (0, 0, 0))
@@ -50,8 +52,8 @@ class Obchod:
     def check_click(self, pos):
         for idx, item in enumerate(self.items):
             x = 100
-            y = 150 + idx * 100
-            width = 300
+            y = 50 + idx * 100
+            width = 350
             height = 80
 
             if x <= pos[0] <= x + width and y <= pos[1] <= y + height:
@@ -68,17 +70,25 @@ class Obchod:
                         else:
                             self.hrac.sheep += 1 
                             self.hrac.money -= item["price"]
-
+                    elif item["attribute"] == "cow":
+                        if self.hrac.cow_placed > 0 or self.hrac.cow > 0:
+                            print("You already have a cow!")
+                        else:
+                            self.hrac.cow += 1 
+                            self.hrac.money -= item["price"]
+                    elif item["attribute"] == "pig":
+                        self.hrac.pig += 1
+                        self.hrac.money -= item["price"]
     
     def run(self):
         while self.running:
-            self.screen.fill((255, 255, 255))
+            self.screen.fill((235, 235, 255))
             self.display_items() 
             self.sell_items()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Kliknutí levým tlačítkem
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: 
                     self.check_click(event.pos)
 
             pygame.display.update()

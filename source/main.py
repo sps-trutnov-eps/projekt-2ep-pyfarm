@@ -55,7 +55,7 @@ class Hrac(pygame.sprite.Sprite):
         self.sheep = 1
         self.wool = 0
         self.sheep_placed = False
-        self.cow = 1
+        self.cow = 0
         self. milk = 0
         self.cow_placed = False
         self.pig = 2
@@ -279,7 +279,7 @@ class Cow(pygame.sprite.Sprite):
     def update(self):
         if not self.has_milk:
             current_time = pygame.time.get_ticks()
-            if current_time - self.growth_timer > 10000:  # 10 seconds for wool to regrow
+            if current_time - self.growth_timer > 10000:
                 self.has_milk = True
                 self.image = self.image_milk
 
@@ -316,7 +316,7 @@ class Sheep(pygame.sprite.Sprite):
     def update(self):
         if not self.has_wool:
             current_time = pygame.time.get_ticks()
-            if current_time - self.growth_timer > 10000:  # 10 seconds for wool to regrow
+            if current_time - self.growth_timer > 10000:
                 self.has_wool = True
                 self.image = self.image_with_wool
 
@@ -413,7 +413,7 @@ sheep = Sheep(sheep_fence, camera_group)
 ctverec_obchodu = Ctverec_obchodu((255,0,0), 80, 50, 1500, 1200, camera_group)
 cow_fence = CowFence((200, 100, 50), 150, 150, 900, 1400, camera_group) 
 cow = Cow(cow_fence, camera_group)
-pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)  # Position the pig fence
+pig_fence = PigFence((180, 50, 50), 150, 150, 900, 1600, camera_group)
 pig = Pig(pig_fence, camera_group)
 closet_button = pygame.Rect(850, 10, 100, 40)
 carrot_seed_image = pygame.image.load('images/seeds/carrot_seeds.png')
