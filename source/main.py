@@ -43,22 +43,22 @@ class Hrac(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load("images\clothes\character_pink.png"), (35,80)).convert_alpha()
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
-        self.money = 100
+        self.money = 0
         self.speed = 5
         self.seeds = {
-            'carrot': 3,  
-            'wheat': 2   
+            'carrot': 1,  
+            'wheat': 1   
         }
         self.carrots = 0
         self.wheat = 0
         self.selected_seed = "carrot"
-        self.sheep = 1
+        self.sheep = 0
         self.wool = 0
         self.sheep_placed = False
         self.cow = 0
         self. milk = 0
         self.cow_placed = False
-        self.pig = 2
+        self.pig = 0
         self.meat = 0 
         self.pig_placed = False 
         

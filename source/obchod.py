@@ -13,28 +13,28 @@ class Obchod:
         #self.sheep_max_timer = pygame.time.get_ticks()
         self.running = True
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
-            {"name": "Carrot Seeds", "price": 20, "attribute": "carrot_seeds"},
-            {"name": "Wheat Seeds", "price": 30, "attribute": "wheat_seeds"},
+            {"name": "Carrot Seeds", "price": 10, "attribute": "carrot_seeds"},
+            {"name": "Wheat Seeds", "price": 20, "attribute": "wheat_seeds"},
             {"name": "Sheep", "price": 60, "attribute": "sheep"},
-            {"name": "Cow", "price": 60, "attribute": "cow"},
-            {"name": "Pig", "price": 60, "attribute": "pig"}
+            {"name": "Cow", "price": 80, "attribute": "cow"},
+            {"name": "Pig", "price": 100, "attribute": "pig"}
         ]
     
     def sell_items(self):
         if self.hrac.carrots > 0:
-            self.hrac.money += self.hrac.carrots * 10
+            self.hrac.money += self.hrac.carrots * 15
             self.hrac.carrots = 0
         if self.hrac.wheat > 0:
-            self.hrac.money += self.hrac.wheat * 10
+            self.hrac.money += self.hrac.wheat * 25
             self.hrac.wheat = 0
         if self.hrac.wool > 0:
             self.hrac.money += self.hrac.wool * 10
             self.hrac.wool = 0
         if self.hrac.milk > 0:
-            self.hrac.money += self.hrac.milk * 10
+            self.hrac.money += self.hrac.milk * 20
             self.hrac.milk = 0
         if self.hrac.meat > 0:
-            self.hrac.money += self.hrac.meat * 10
+            self.hrac.money += self.hrac.meat * 40
             self.hrac.meat = 0
     
     def display_items(self):
