@@ -15,6 +15,7 @@ class Obchod:
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
             {"name": "Carrot Seeds", "price": 10, "attribute": "carrot_seeds"},
             {"name": "Wheat Seeds", "price": 20, "attribute": "wheat_seeds"},
+            {"name": "Potato Seeds", "price": 40, "attribute": "potato_seeds"},
             {"name": "Sheep", "price": 60, "attribute": "sheep"},
             {"name": "Cow", "price": 80, "attribute": "cow"},
             {"name": "Pig", "price": 100, "attribute": "pig"}
@@ -27,6 +28,9 @@ class Obchod:
         if self.hrac.wheat > 0:
             self.hrac.money += self.hrac.wheat * 25
             self.hrac.wheat = 0
+        if self.hrac.potatoes > 0:
+            self.hrac.money += self.hrac.potatoes * 45
+            self.hrac.potatoes = 0
         if self.hrac.wool > 0:
             self.hrac.money += self.hrac.wool * 10
             self.hrac.wool = 0
@@ -65,6 +69,9 @@ class Obchod:
                         self.hrac.money -= item["price"]
                     elif item["attribute"] == "wheat_seeds":
                         self.hrac.seeds['wheat'] += 1
+                        self.hrac.money -= item["price"]
+                    elif item["attribute"] == "potato_seeds":
+                        self.hrac.seeds['potato'] += 1
                         self.hrac.money -= item["price"]
                     elif item["attribute"] == "sheep":
                         if self.hrac.sheep_placed > 0 or self.hrac.sheep > 0:

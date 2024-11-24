@@ -110,7 +110,7 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_w]:  # Press 'W' to select wheat seeds
             self.selected_seed = "wheat"
         if keys[pygame.K_p]:  # Press 'P' to select potato seeds
-            self.selected_seed = "wheat"
+            self.selected_seed = "potato"
 
         if keys[pygame.K_SPACE] and self.cow > 0 and not self.cow_placed:
             if self.rect.colliderect(cow_fence.rect):
