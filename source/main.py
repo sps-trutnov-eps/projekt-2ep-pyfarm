@@ -408,12 +408,13 @@ camera_group = Camera_group()
 hrac = Hrac((1400,1200), camera_group)
 
 farm_plot_positions = [
-    (200, 300),  # First plot position
-    (350, 300),  # Second plot position
-    (500, 300),  # Third plot position
-    (650, 300),  # Fourth plot position
-    (800, 300),   # Fifth plot position
-    (950, 300)   # Sixth plot position
+    
+    (200, 650),  # First plot position
+    (350, 650),  # Second plot position
+    (500, 650),  # Third plot position
+    (650, 650),  # Fourth plot position
+    (800, 650),   # Fifth plot position
+    (950, 650)   # Sixth plot position
 ]
 
 farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
