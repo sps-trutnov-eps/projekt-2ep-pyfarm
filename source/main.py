@@ -408,13 +408,13 @@ camera_group = Camera_group()
 hrac = Hrac((1400,1200), camera_group)
 
 farm_plot_positions = [
-    
-    (200, 650),  # First plot position
-    (350, 650),  # Second plot position
-    (500, 650),  # Third plot position
-    (650, 650),  # Fourth plot position
-    (800, 650),   # Fifth plot position
-    (950, 650)   # Sixth plot position
+    (50, 650), 
+    (200, 650),
+    (350, 650),
+    (500, 650), 
+    (650, 650),
+    (800, 650), 
+    (950, 650)  
 ]
 
 farm_plots = [FarmPlot(x, y) for x, y in farm_plot_positions]
@@ -481,16 +481,16 @@ while running:
         plot.draw(camera_group.display_surface, camera_group.posun)
 
     seeds_surf = font.render(f"Carrot Seeds: {hrac.seeds['carrot']}", False, (0, 0, 0))
-    screen.blit(seeds_surf, (50, 320))
-    screen.blit(carrot_seed_image, (10,315))
+    screen.blit(seeds_surf, (50, 25,))
+    screen.blit(carrot_seed_image, (10,20))
 
     wheat_seeds_surf = font.render(f"Wheat Seeds: {hrac.seeds['wheat']}", False, (0, 0, 0))
-    screen.blit(wheat_seeds_surf, (50, 30))
-    screen.blit(wheat_seed_image, (10,25))
+    screen.blit(wheat_seeds_surf, (50, 70))
+    screen.blit(wheat_seed_image, (10,70))
     
     potato_seeds_surf = font.render(f"Potato Seeds: {hrac.seeds['potato']}", False, (0, 0, 0))
-    screen.blit(potato_seeds_surf, (50, 450))
-    screen.blit(potato_seed_image, (10,445))
+    screen.blit(potato_seeds_surf, (50, 110))
+    screen.blit(potato_seed_image, (10,105))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
     screen.blit(selected_seed_surf, (10, 650))
@@ -500,15 +500,15 @@ while running:
     screen.blit(money_surf, money_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
-    carrots_rect = carrots_surf.get_rect(topleft=(10, 240))
+    carrots_rect = carrots_surf.get_rect(topleft=(10, 150))
     screen.blit(carrots_surf, carrots_rect)
     
     wheat_surf = font.render(f"Wheat: {hrac.wheat}", False, (0, 0, 0))
-    wheat_rect = wheat_surf.get_rect(topleft=(10, 280))
+    wheat_rect = wheat_surf.get_rect(topleft=(10, 190))
     screen.blit(wheat_surf, wheat_rect)
     
     potatoes_surf = font.render(f"Potatoes: {hrac.potatoes}", False, (0, 0, 0))
-    potatoes_rect = potatoes_surf.get_rect(topleft=(10, 485))
+    potatoes_rect = potatoes_surf.get_rect(topleft=(10, 230))
     screen.blit(potatoes_surf, potatoes_rect)
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
@@ -517,27 +517,27 @@ while running:
     cow.update()
     cow.update()
     wool_surf = font.render(f"Wool: {hrac.wool}", False, (0, 0, 0))
-    screen.blit(wool_surf, (10, 70))
+    screen.blit(wool_surf, (10, 490))
     
     sheep_surf = font.render(f"Sheep: {hrac.sheep}", False, (0, 0, 0))
-    screen.blit(sheep_surf, (50, 110))
-    screen.blit(sheep_image, (8,105))
+    screen.blit(sheep_surf, (50, 370))
+    screen.blit(sheep_image, (8,365))
 
     milk_surf = font.render(f"Milk: {hrac.milk}", False, (0, 0, 0))
-    screen.blit(milk_surf, (50, 150))
-    screen.blit(milk_image, (10,140))
+    screen.blit(milk_surf, (50, 410))
+    screen.blit(milk_image, (10,400))
 
     cow_surf = font.render(f"Cow: {hrac.cow}", False, (0, 0, 0))
-    screen.blit(cow_surf, (50, 190))
-    screen.blit(cow_image, (8,189))
+    screen.blit(cow_surf, (50, 280))
+    screen.blit(cow_image, (8,279))
 
     pig_surf = font.render(f"Pig: {hrac.pig}", False, (0, 0, 0))
-    screen.blit(pig_surf, (50, 410))
-    screen.blit(pig_image, (8,406))
+    screen.blit(pig_surf, (50, 325))
+    screen.blit(pig_image, (8,321))
     
     meat_surf = font.render(f"Meat: {hrac.meat}", False, (0, 0, 0))
-    screen.blit(meat_surf, (55, 370))
-    screen.blit(meat_image, (10,360))
+    screen.blit(meat_surf, (55, 455))
+    screen.blit(meat_image, (10,445))
     
     closet_button = pygame.Rect(1050, 200, 150, 50)
     pygame.draw.rect(screen, (250, 200, 200), closet_button)
