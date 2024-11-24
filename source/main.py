@@ -47,10 +47,12 @@ class Hrac(pygame.sprite.Sprite):
         self.speed = 5
         self.seeds = {
             'carrot': 1,  
-            'wheat': 1   
+            'wheat': 1,
+            'potato': 1
         }
         self.carrots = 0
         self.wheat = 0
+        self.potatoes = 0
         self.selected_seed = "carrot"
         self.sheep = 0
         self.wool = 0
@@ -89,6 +91,8 @@ class Hrac(pygame.sprite.Sprite):
                         self.carrots += 1
                     elif harvested_crop == "wheat":
                         self.wheat += 1
+                    elif  harvested_crop == 'potato':
+                            self.potatoes += 1
                     break
         
         if keys[pygame.K_SPACE] and self.sheep > 0 and not self.sheep_placed:
@@ -104,6 +108,8 @@ class Hrac(pygame.sprite.Sprite):
         if keys[pygame.K_c]:  # Press 'C' to select carrot seeds
             self.selected_seed = "carrot"
         if keys[pygame.K_w]:  # Press 'W' to select wheat seeds
+            self.selected_seed = "wheat"
+        if keys[pygame.K_p]:  # Press 'P' to select potato seeds
             self.selected_seed = "wheat"
 
         if keys[pygame.K_SPACE] and self.cow > 0 and not self.cow_placed:
@@ -240,6 +246,15 @@ class FarmPlot:
                 growth_image = pygame.image.load("images/seeds/wheat2.png").convert_alpha()
             elif self.growth_stage == 3:
                 growth_image = pygame.image.load("images/seeds/wheat3.png").convert_alpha()
+        elif self.crop_type == "potato":
+            if self.growth_stage == 0:
+                growth_image = pygame.image.load("images/seeds/seeds.png").convert_alpha()
+            elif self.growth_stage == 1:
+                growth_image = pygame.image.load("images/seeds/potato1.png").convert_alpha()
+            elif self.growth_stage == 2:
+                growth_image = pygame.image.load("images/seeds/potato2.png").convert_alpha()
+            elif self.growth_stage == 3:
+                growth_image = pygame.image.load("images/seeds/potato3.png").convert_alpha()
 
         if growth_image:
             growth_image = pygame.transform.scale(growth_image, (100, 100))
@@ -423,6 +438,8 @@ pig_image = pygame.transform.scale(pygame.image.load("images/pig.png"), (40,30))
 
 wheat_seed_image = pygame.image.load('images/seeds/wheat_seeds.png')
 wheat_seed_image = pygame.transform.scale(wheat_seed_image, (30, 30))
+potato_seed_image = pygame.image.load('images/seeds/potato_seeds.png')
+potato_seed_image = pygame.transform.scale(potato_seed_image, (30, 30))
 
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
@@ -469,6 +486,10 @@ while running:
     wheat_seeds_surf = font.render(f"Wheat Seeds: {hrac.seeds['wheat']}", False, (0, 0, 0))
     screen.blit(wheat_seeds_surf, (50, 30))
     screen.blit(wheat_seed_image, (10,25))
+    
+    potato_seeds_surf = font.render(f"Potato Seeds: {hrac.seeds['potato']}", False, (0, 0, 0))
+    screen.blit(potato_seeds_surf, (50, 450))
+    screen.blit(potato_seed_image, (10,445))
 
     selected_seed_surf = font.render(f"Selected Seed: {hrac.selected_seed.capitalize()}", False, (0, 0, 0))
     screen.blit(selected_seed_surf, (10, 650))
@@ -484,6 +505,10 @@ while running:
     wheat_surf = font.render(f"Wheat: {hrac.wheat}", False, (0, 0, 0))
     wheat_rect = wheat_surf.get_rect(topleft=(10, 280))
     screen.blit(wheat_surf, wheat_rect)
+    
+    potatoes_surf = font.render(f"Potatoes: {hrac.potatoes}", False, (0, 0, 0))
+    potatoes_rect = potatoes_surf.get_rect(topleft=(10, 485))
+    screen.blit(potatoes_surf, potatoes_rect)
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
     
