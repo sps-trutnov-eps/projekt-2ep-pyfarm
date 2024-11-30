@@ -97,7 +97,7 @@ class Hrac(pygame.sprite.Sprite):
         
         if keys[pygame.K_SPACE] and self.sheep > 0 and not self.sheep_placed:
             if self.rect.colliderect(sheep_fence.rect):
-                sheep.place_in_fence(sheep_fence)  # Use the correct method here
+                sheep.place_in_fence(sheep_fence)
                 self.sheep -= 1
                 self.sheep_placed = True
         

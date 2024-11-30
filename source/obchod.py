@@ -11,6 +11,8 @@ class Obchod:
         self.clock = pygame.time.Clock()
         self.max_sheep_surf = self.font.render("You already have a sheep!", False, (0, 0, 0))
         self.sheep_message_time = None 
+        self.max_cow_surf = self.font.render("You already have a cow!", False, (0, 0, 0))
+        self.cow_message_time = None
         self.running = True
         self.items = [  # Nabídka obchodu: (název, cena, atribut hráče, obrázek nebo text)
             {"name": "Carrot Seeds", "price": 10, "attribute": "carrot_seeds"},
@@ -38,7 +40,7 @@ class Obchod:
             self.hrac.money += self.hrac.milk * 20
             self.hrac.milk = 0
         if self.hrac.meat > 0:
-            self.hrac.money += self.hrac.meat * 40
+            self.hrac.money += self.hrac.meat * 120
             self.hrac.meat = 0
     
     def display_items(self):
@@ -82,7 +84,8 @@ class Obchod:
                             self.hrac.money -= item["price"]
                     elif item["attribute"] == "cow":
                         if self.hrac.cow_placed > 0 or self.hrac.cow > 0:
-                            print("You already have a cow!")
+                            #print("You already have a cow!")
+                            self.cow_message_time = pygame.time.get_ticks()
                         else:
                             self.hrac.cow += 1 
                             self.hrac.money -= item["price"]
@@ -96,10 +99,15 @@ class Obchod:
             self.display_items() 
             self.sell_items()
 
-            if self.sheep_message_time and pygame.time.get_ticks() - self.sheep_message_time < 7000:
+            if self.sheep_message_time and pygame.time.get_ticks() - self.sheep_message_time < 5000:
                 self.screen.blit(self.max_sheep_surf, (600, 50))
-            elif self.sheep_message_time and pygame.time.get_ticks() - self.sheep_message_time >= 7000:
+            elif self.sheep_message_time and pygame.time.get_ticks() - self.sheep_message_time >= 5000:
                 self.sheep_message_time = None
+            
+            if self.cow_message_time and pygame.time.get_ticks() - self.cow_message_time < 5000:
+                self.screen.blit(self.max_cow_surf, (604, 110))
+            elif self.cow_message_time and pygame.time.get_ticks() - self.cow_message_time >= 5000:
+                self.cow_message_time = None
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
