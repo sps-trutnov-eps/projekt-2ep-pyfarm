@@ -552,9 +552,7 @@ while running:
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
-        shop.run()
-        print("1")
-    
+        shop.run()    
 
     pygame.display.update()
     clock.tick(60)
