@@ -40,7 +40,7 @@ class Camera_group(pygame.sprite.Group):
 class Hrac(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
-        self.image = pygame.transform.scale(pygame.image.load("images\clothes\character_pink.png"), (35,80)).convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load("images/clothes/acharacter_pink.png"), (35,80)).convert_alpha()
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.money = 0
@@ -152,20 +152,19 @@ class Closet:
         
         # sezanm cen skinů
         self.clothing_prices = {
-            0: 50,   
-            1: 100,  
-            2: 150,  
-            3: 200,  
-            4: 250,  
-            5: 300,
-            6: 400,
-            7: 450,
-            8: 500,
-            9: 550,
-            10: 600,
-            11: 650,
-            12: 700,
-            13: 750
+            0: 0, # pink   
+            1: 50, # blue and black 
+            2: 20, # blue  
+            3: 20, # green  
+            4: 20, # orange 
+            5: 20, # purple
+            6: 20, # red 
+            7: 20, # yellow
+            8: 100, # red and white, black
+            9: 200, # red, blue
+            10: 100, # red dress
+            11: 150, # white dress
+            12: 75  # white and black
         }
     
     def load_clothing_images(self):
