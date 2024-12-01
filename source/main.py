@@ -44,7 +44,7 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.money = 0
-        self.special_money = 0
+        self.special_money = 1000
         self.speed = 5
         self.seeds = {
             'carrot': 1,  
@@ -63,7 +63,8 @@ class Hrac(pygame.sprite.Sprite):
         self.cow_placed = False
         self.pig = 0
         self.meat = 0 
-        self.pig_placed = False 
+        self.pig_placed = False
+        self.owned_skins = {0: True}  
         
     def input(self):
         keys = pygame.key.get_pressed()
@@ -148,7 +149,25 @@ class Closet:
         self.hrac = hrac
         self.clothing_images = self.load_clothing_images()
         self.selected_skin = None
-
+        
+        # sezanm cen skinů
+        self.clothing_prices = {
+            0: 50,   
+            1: 100,  
+            2: 150,  
+            3: 200,  
+            4: 250,  
+            5: 300,
+            6: 400,
+            7: 450,
+            8: 500,
+            9: 550,
+            10: 600,
+            11: 650,
+            12: 700,
+            13: 750
+        }
+    
     def load_clothing_images(self):
         images = []
         folder_path = "images/Clothes"
@@ -162,13 +181,25 @@ class Closet:
     def display_closet(self, screen):
         screen.fill((220, 220, 220))
         font = pygame.font.Font(None, 42)
-        title_surf = font.render("Choose Your Skin", True, (0, 0, 0))
-        screen.blit(title_surf, (400, 50))
+        small_font = pygame.font.Font(None, 32)
+
+        title_surf = font.render("Clothes Shop", True, (0, 0, 0))
+        screen.blit(title_surf, (500, 50))
+        money_surf = font.render(f"Special Money: {self.hrac.special_money}", True, (0, 0, 0))
+        screen.blit(money_surf, (900, 80))
         
         for idx, img in enumerate(self.clothing_images):
             x = 100 + (idx % 5) * 120
             y = 150 + (idx // 5) * 120
             screen.blit(img, (x, y))
+
+            if idx in self.hrac.owned_skins:
+                owned_surf = small_font.render("Owned", True, (0, 128, 0))
+                screen.blit(owned_surf, (x, y + 90))
+            else:
+                price_surf = small_font.render(f"${self.clothing_prices[idx]}", True, (0, 0, 0))
+                screen.blit(price_surf, (x, y + 90))
+
             if img.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
                 pygame.draw.rect(screen, (0, 255, 0), img.get_rect(topleft=(x, y)), 3)
 
@@ -183,10 +214,17 @@ class Closet:
                     for idx, img in enumerate(self.clothing_images):
                         x = 100 + (idx % 5) * 120
                         y = 150 + (idx // 5) * 120
+
                         if img.get_rect(topleft=(x, y)).collidepoint(event.pos):
-                            self.hrac.image = pygame.transform.scale(img, (35, 80))
-                            closet_open = False
-                            break
+                            if idx in self.hrac.owned_skins:
+                                self.hrac.image = pygame.transform.scale(img, (35, 80))
+                                closet_open = False
+                            else:
+                                if self.hrac.special_money >= self.clothing_prices[idx]:
+                                    self.hrac.special_money -= self.clothing_prices[idx]
+                                    self.hrac.owned_skins[idx] = True
+                                    self.hrac.image = pygame.transform.scale(img, (35, 80))
+                                    closet_open = False
 
             self.display_closet(screen)
             pygame.display.update()
@@ -456,6 +494,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            closet_button = pygame.Rect(1050, 200, 150, 50)
             if closet_button.collidepoint(event.pos):
                 closet = Closet(hrac)
                 closet.run(screen)
