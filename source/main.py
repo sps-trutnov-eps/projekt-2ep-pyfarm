@@ -44,6 +44,7 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.money = 0
+        self.special_money = 0
         self.speed = 5
         self.seeds = {
             'carrot': 1,  
@@ -547,8 +548,12 @@ while running:
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
             sprite.kill()
-            hrac.money += 10
-            money_surf = font.render(f"Money: {hrac.money}", False, (0, 0, 0))
+            hrac.special_money += 10
+            money_surf = font.render(f" Special Money: {hrac.special_money}", False, (0, 0, 0))
+            
+    special_money_surf = font.render(f" Special Money: {hrac.special_money}", False, (0,0,0))
+    special_money_rect = special_money_surf.get_rect(center = (1040, 80))
+    screen.blit(special_money_surf, special_money_rect)
     
     if hrac.rect.colliderect(ctverec_obchodu.rect):
         shop = Obchod(hrac) 
