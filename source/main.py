@@ -85,7 +85,7 @@ class Hrac(pygame.sprite.Sprite):
                     self.seeds[self.selected_seed] -= 1  
                     break
                 
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_h]:
             for plot in farm_plots:
                 if self.rect.colliderect(plot.rect) and plot.is_planted and plot.growth_stage == 3:
                     harvested_crop = plot.harvest()
