@@ -227,6 +227,9 @@ class Closet:
 
             self.display_closet(screen)
             pygame.display.update()
+
+class Pravidla:
+    None
             
 class FarmPlot:
     def __init__(self, x, y):
@@ -469,6 +472,7 @@ closet_button = pygame.Rect(850, 10, 100, 40)
 carrot_seed_image = pygame.image.load('images/seeds/carrot_seeds.png')
 carrot_seed_image = pygame.transform.scale(carrot_seed_image, (40, 40))
 
+
 milk_image = pygame.transform.scale(pygame.image.load("images/milk.png"), (30,40))
 meat_image = pygame.transform.scale(pygame.image.load("images/meat.png"), (40,40))
 sheep_image = pygame.transform.scale(pygame.image.load("images/sheep.png"), (40,30))
@@ -497,6 +501,9 @@ while running:
             if closet_button.collidepoint(event.pos):
                 closet = Closet(hrac)
                 closet.run(screen)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if pravidla_button.collidepoint(event.pos):
+                pravidla = Pravidla
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if hrac.seeds[hrac.selected_seed] > 0:
@@ -582,6 +589,11 @@ while running:
     pygame.draw.rect(screen, (250, 200, 200), closet_button)
     closet_button_text = font.render("Closet", True, (255, 255, 255))
     screen.blit(closet_button_text, closet_button.topleft)
+    
+    pravidla_button = pygame.Rect(1050, 630, 150, 50)
+    pygame.draw.rect(screen, (0, 139, 139), pravidla_button)
+    pravidla_button_text = font.render("Pravidla", True, (255, 255, 255))
+    screen.blit(pravidla_button_text, pravidla_button.topleft)
     
     for sprite in camera_group.sprites():
         if isinstance(sprite, Flower) and hrac.rect.colliderect(sprite.rect):
