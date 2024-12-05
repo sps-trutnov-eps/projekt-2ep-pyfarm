@@ -229,7 +229,26 @@ class Closet:
             pygame.display.update()
 
 class Pravidla:
-    None
+    def __init__(self):
+        self.font = pygame.font.Font(None, 42) 
+
+    def display_rules(self, screen):
+
+        screen.fill((214, 255, 255)) 
+        title_surf = self.font.render("Pravidla hry", True, (0, 0, 0))
+        title_surf_rect = title_surf.get_rect(center = (600, 50))
+
+        screen.blit(title_surf, title_surf_rect)
+
+    def run(self, screen):
+        rules_open = True
+        while rules_open:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    rules_open = False
+
+            self.display_rules(screen)
+            pygame.display.update()
             
 class FarmPlot:
     def __init__(self, x, y):
@@ -471,6 +490,7 @@ pig = Pig(pig_fence, camera_group)
 closet_button = pygame.Rect(850, 10, 100, 40)
 carrot_seed_image = pygame.image.load('images/seeds/carrot_seeds.png')
 carrot_seed_image = pygame.transform.scale(carrot_seed_image, (40, 40))
+pravidla_button = pygame.Rect(1050, 630, 150, 50)
 
 
 milk_image = pygame.transform.scale(pygame.image.load("images/milk.png"), (30,40))
@@ -501,9 +521,9 @@ while running:
             if closet_button.collidepoint(event.pos):
                 closet = Closet(hrac)
                 closet.run(screen)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
             if pravidla_button.collidepoint(event.pos):
-                pravidla = Pravidla
+                pravidla = Pravidla()
+                pravidla.run(screen)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if hrac.seeds[hrac.selected_seed] > 0:
