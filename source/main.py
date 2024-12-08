@@ -230,15 +230,42 @@ class Closet:
 
 class Pravidla:
     def __init__(self):
-        self.font = pygame.font.Font(None, 42) 
+        self.font = pygame.font.Font(None, 30) 
+        self.text = [
+        "Vaším cílem je spravovat svou farmu, získávat suroviny a následně je prodávat.",
+        " ",
+        "Ovládání: Po mapě se můžete pohybovat šipkami. Pro zasazení zvířat do ohrady zmáčkněte mezerník.",
+        "Pro zasazení rostlin -p- pro brambory, -w- pro obilí a -c- pro mrkve. Pro sesbírání surovin klávesu -h-.",
+        "V obchodu nebo v pravidlech se zpět do hry dostanete kliknutím na křížek v pravém horním rohu okna.",
+        "Z Closet se do hry dostanete při vybrání jednoho z oblečků.",
+        " ",
+        "Získávání surovin: Máte k dispozici šest záhonů pro tři druhy rostlin: mrkve, obilí a brambory.",
+        "Pro zvířata máte tři ohrady: spodní pro prasata, střední pro krávu a horní pro ovci.",
+        "Ovci a krávu můžete mít jen jednu za celou hru. Ze zvířat můžete získat vlnu, mléko a maso.",
+        "U rostlin i zvířat musíte chvíli počkat, než budete moct suroviny posbírat.",
+        " ",
+        "Obchod: Obchod se nachází kousek od domu, otevře se, když do něj postavičkou narazíte.",
+        "Po jeho otevření se všechny suroviny automaticky prodají.",
+        "Pro koupení rostliny nebo zvířete klikněte na obdélník s názvem a cenou daného produktu.",
+        " ",
+        "Květiny a speciální peníze: Na mapě se náhodně objevují květiny.",
+        "Pokud do nich vstoupíte, automaticky je sesbíráte. Každá květina vám přidá 10 speciálních peněz,",
+        "za které si budete moct koupit oblečky."
+    ]
 
     def display_rules(self, screen):
 
         screen.fill((214, 255, 255)) 
         title_surf = self.font.render("Pravidla hry", True, (0, 0, 0))
         title_surf_rect = title_surf.get_rect(center = (600, 50))
-
         screen.blit(title_surf, title_surf_rect)
+        
+        y_offset = 90  
+        for line in self.text:
+            text_surf = self.font.render(line, True, (0, 0, 0))  
+            screen.blit(text_surf, (50, y_offset))
+            y_offset += 30
+        
 
     def run(self, screen):
         rules_open = True
