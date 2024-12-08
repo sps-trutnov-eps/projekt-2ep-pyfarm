@@ -184,6 +184,8 @@ class Closet:
 
         title_surf = font.render("Clothes Shop", True, (0, 0, 0))
         screen.blit(title_surf, (500, 50))
+        info_surf = font.render("Choose a skin to go back.", True, (0, 0, 0))
+        screen.blit(info_surf, (400, 80))
         money_surf = font.render(f"Special Money: {self.hrac.special_money}", True, (0, 0, 0))
         screen.blit(money_surf, (900, 80))
         
@@ -235,7 +237,8 @@ class Pravidla:
         "Vaším cílem je spravovat svou farmu, získávat suroviny a následně je prodávat.",
         " ",
         "Ovládání: Po mapě se můžete pohybovat šipkami. Pro zasazení zvířat do ohrady zmáčkněte mezerník.",
-        "Pro zasazení rostlin -p- pro brambory, -w- pro obilí a -c- pro mrkve. Pro sesbírání surovin klávesu -h-.",
+        "Pro zasazení rostlin -p- pro brambory, -w- pro obilí a -c- pro mrkve. Zasadí se mezerníkem.",
+        "Pro sesbírání surovin stiskněte klávesu -h-.",
         "V obchodu nebo v pravidlech se zpět do hry dostanete kliknutím na křížek v pravém horním rohu okna.",
         "Z Closet se do hry dostanete při vybrání jednoho z oblečků.",
         " ",
