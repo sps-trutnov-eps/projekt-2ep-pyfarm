@@ -44,7 +44,7 @@ class Hrac(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos) 
         self.direction = pygame.math.Vector2()
         self.money = 0
-        self.special_money = 1000
+        self.special_money = 0
         self.speed = 5
         self.seeds = {
             'carrot': 1,  
@@ -263,7 +263,7 @@ class Pravidla:
         y_offset = 90  
         for line in self.text:
             text_surf = self.font.render(line, True, (0, 0, 0))  
-            screen.blit(text_surf, (50, y_offset))
+            screen.blit(text_surf, (90, y_offset))
             y_offset += 30
         
 
