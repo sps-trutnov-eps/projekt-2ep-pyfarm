@@ -531,6 +531,16 @@ wheat_seed_image = pygame.transform.scale(wheat_seed_image, (30, 30))
 potato_seed_image = pygame.image.load('images/seeds/potato_seeds.png')
 potato_seed_image = pygame.transform.scale(potato_seed_image, (30, 30))
 
+carrot_image = pygame.image.load('images/seeds/carrot.png')
+carrot_image = pygame.transform.scale(carrot_image, (30, 30))
+wheat_image = pygame.image.load('images/seeds/wheat.png')
+wheat_image = pygame.transform.scale(wheat_image, (30, 30))
+potato_image = pygame.image.load('images/seeds/potato.png')
+potato_image = pygame.transform.scale(potato_image, (30, 30))
+
+wool_image = pygame.image.load('images/wool.png')
+wool_image = pygame.transform.scale(wool_image, (35, 35))
+
 FLOWER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(FLOWER_EVENT, random.randint(5000, 20000))
 
@@ -593,16 +603,19 @@ while running:
     screen.blit(money_surf, money_rect)
 
     carrots_surf = font.render(f"Carrots: {hrac.carrots}", False, (0, 0, 0))
-    carrots_rect = carrots_surf.get_rect(topleft=(10, 150))
+    carrots_rect = carrots_surf.get_rect(topleft=(50, 150))
     screen.blit(carrots_surf, carrots_rect)
+    screen.blit(carrot_image, (10,145))
     
     wheat_surf = font.render(f"Wheat: {hrac.wheat}", False, (0, 0, 0))
-    wheat_rect = wheat_surf.get_rect(topleft=(10, 190))
+    wheat_rect = wheat_surf.get_rect(topleft=(50, 190))
     screen.blit(wheat_surf, wheat_rect)
+    screen.blit(wheat_image, (10,185))
     
     potatoes_surf = font.render(f"Potatoes: {hrac.potatoes}", False, (0, 0, 0))
-    potatoes_rect = potatoes_surf.get_rect(topleft=(10, 230))
+    potatoes_rect = potatoes_surf.get_rect(topleft=(50, 230))
     screen.blit(potatoes_surf, potatoes_rect)
+    screen.blit(potato_image, (10,225))
     
     camera_group.display_surface.blit(hrac.image, hrac.rect.topleft - camera_group.posun)
     
@@ -610,7 +623,8 @@ while running:
     cow.update()
     cow.update()
     wool_surf = font.render(f"Wool: {hrac.wool}", False, (0, 0, 0))
-    screen.blit(wool_surf, (10, 490))
+    screen.blit(wool_surf, (50, 490))
+    screen.blit(wool_image, (10,490))
     
     sheep_surf = font.render(f"Sheep: {hrac.sheep}", False, (0, 0, 0))
     screen.blit(sheep_surf, (50, 370))
