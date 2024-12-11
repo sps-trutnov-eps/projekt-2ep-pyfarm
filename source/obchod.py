@@ -20,7 +20,8 @@ class Obchod:
             {"name": "Potato Seeds", "price": 40, "attribute": "potato_seeds"},
             {"name": "Sheep", "price": 60, "attribute": "sheep"},
             {"name": "Cow", "price": 80, "attribute": "cow"},
-            {"name": "Pig", "price": 100, "attribute": "pig"}
+            {"name": "Pig", "price": 100, "attribute": "pig"},
+            {"name": "Money", "price": 50, "attribute": "money"}
         ]
     
     def sell_items(self):
@@ -46,8 +47,8 @@ class Obchod:
     def display_items(self):
         for idx, item in enumerate(self.items):
             x = 100
-            y = 50 + idx * 100
-            width = 350
+            y = 10 + idx * 100
+            width = 400
             height = 80
         
             pygame.draw.rect(self.screen, (174, 198, 255), (x, y, width, height))
@@ -60,8 +61,8 @@ class Obchod:
     def check_click(self, pos):
         for idx, item in enumerate(self.items):
             x = 100
-            y = 50 + idx * 100
-            width = 350
+            y = 10 + idx * 100
+            width = 400
             height = 80
 
             if x <= pos[0] <= x + width and y <= pos[1] <= y + height:
@@ -92,6 +93,10 @@ class Obchod:
                     elif item["attribute"] == "pig":
                         self.hrac.pig += 1
                         self.hrac.money -= item["price"]
+                elif self.hrac.special_money >= item["price"]:
+                    if item["attribute"] == "money":
+                        self.hrac.money += 10
+                        self.hrac.special_money -= item["price"]
     
     def run(self):
         while self.running:
@@ -119,11 +124,19 @@ class Obchod:
             money_rect = money_surf.get_rect(center = (1100, 45))
             self.screen.blit(money_surf, money_rect)
 
+            special_money_surf = self.font.render(f"Special money: {self.hrac.special_money}", False, (0,0,0))
+            special_money_rect = special_money_surf.get_rect(center = (1045, 80))
+            self.screen.blit(special_money_surf, special_money_rect)
+
+            special_surf = self.font.render("50 special money for 10 normal money", False, (0,0,0))
+            special_rect = special_surf.get_rect(center = (800, 650))
+            self.screen.blit(special_surf, special_rect)
+
 
             pygame.display.update()
             self.clock.tick(60)
         
         self.hrac.rect.topleft = (self.hrac.rect.x + 150, self.hrac.rect.y)
         pygame.display.set_mode((1200,700))
-        return self.hrac.money
+        return self.hrac.money, self.hrac.special_money
 
